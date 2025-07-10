@@ -1,4 +1,4 @@
-import MovieCard from "../components/MovieCard";
+import MovieSummary from "../components/MovieSummary";
 
 
 function MovieList(props) {
@@ -6,7 +6,7 @@ function MovieList(props) {
         <>
             {props.moviesArr.map((movieObj) => {
                 return (
-                    <MovieCard 
+                    <MovieSummary 
                         key={movieObj.id} 
                         movieDetails={movieObj}
                         onDelete={props.onDelete}
