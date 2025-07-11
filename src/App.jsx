@@ -17,6 +17,7 @@ function App() {
 
   const [moviesToDisplay, setMoviesToDisplay] = useState(movies);
   const [title, setTitle] = useState("")
+  const [year, setYear] = useState("")
   
 
   const deleteMovie = (movieId) => {
@@ -32,7 +33,7 @@ function App() {
     
     const newMovie = {
       title: title,
-      year: 1900
+      year: year
     }
 
     // prepare an array with the new list of movies
@@ -43,6 +44,7 @@ function App() {
 
     // clear form
     setTitle("")
+    setYear("")
   }
 
 
@@ -54,13 +56,32 @@ function App() {
         <h2>Create a new movie</h2>
 
         <form onSubmit={handleSubmit}>
-          <input 
-            type="text" 
-            name="title" 
-            placeholder="enter the title" 
-            value={title} 
-            onChange={(e) => { setTitle(e.target.value) }}
-          />
+
+          <label>
+            Title:
+            <input 
+              type="text" 
+              name="title" 
+              required
+              placeholder="enter the title" 
+              value={title} 
+              onChange={(e) => { setTitle(e.target.value) }}
+            />
+          </label>
+
+          <label>
+            Year:
+            <input 
+              type="number" 
+              min={1950}
+              max={2050}
+              name="year" 
+              required
+              placeholder="enter the year" 
+              value={year}
+              onChange={(e) => { setYear(e.target.value) }}
+            />
+          </label>
 
           <button>Create</button>
         </form>
