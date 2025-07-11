@@ -1,4 +1,4 @@
-import {useState} from "react"
+import { useState } from "react"
 import { Route, Routes } from "react-router-dom"
 
 
@@ -8,6 +8,7 @@ import About from "./pages/About"
 import Contact from "./pages/Contact"
 import MovieList from "./pages/MovieList"
 import MovieDetails from "./pages/MovieDetails"
+import AddMovie from "./pages/AddMovie"
 
 import movies from "./data/movies.json"
 
@@ -16,12 +17,9 @@ import movies from "./data/movies.json"
 function App() {
 
   const [moviesToDisplay, setMoviesToDisplay] = useState(movies);
-  const [title, setTitle] = useState("")
-  const [year, setYear] = useState("")
-  
 
-  
-  const deleteMovie = (movieId) => {    
+
+  const deleteMovie = (movieId) => {
     const newList = moviesToDisplay.filter((movie) => {
       return movie.id !== movieId;
     })
@@ -29,19 +27,18 @@ function App() {
   }
 
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    
+  const createMovie = (newMovieDetails) => {
+
+    // calculate the id of the next movie that we will create
     const movieIds = moviesToDisplay.map((movieObj) => {
       return movieObj.id;
     });
-
     const maxId = Math.max(...movieIds);
     const nextId = maxId + 1;
 
+    // prepare an object with the details of the new movie
     const newMovie = {
-      title: title,
-      year: year,
+      ...newMovieDetails,
       id: nextId
     }
 
@@ -50,55 +47,17 @@ function App() {
 
     // update the list of movies
     setMoviesToDisplay(newList)
-
-    // clear form
-    setTitle("")
-    setYear("")
   }
+
 
 
   return (
     <>
       <Header numberOfMovies={moviesToDisplay.length} />
 
-      <section className="card">
-        <h2>Create a new movie</h2>
-
-        <form onSubmit={handleSubmit}>
-
-          <label>
-            Title:
-            <input 
-              type="text" 
-              name="title" 
-              required
-              placeholder="enter the title" 
-              value={title} 
-              onChange={(e) => { setTitle(e.target.value) }}
-            />
-          </label>
-
-          <label>
-            Year:
-            <input 
-              type="number" 
-              min={1950}
-              max={2050}
-              name="year" 
-              required
-              placeholder="enter the year" 
-              value={year}
-              onChange={(e) => { setYear(e.target.value) }}
-            />
-          </label>
-
-          <button>Create</button>
-        </form>
-
-      </section>
-
       <Routes>
         <Route path="/" element={<MovieList moviesArr={moviesToDisplay} onDelete={deleteMovie} />} />
+        <Route path="/create" element={<AddMovie onCreate={createMovie} />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/movies/:movieId" element={<MovieDetails moviesArr={moviesToDisplay} />} />
